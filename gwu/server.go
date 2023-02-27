@@ -207,6 +207,8 @@ type Server interface {
 	// Tip: Not passing any window names will start the server silently
 	// without opening any windows.
 	Start(openWins ...string) error
+	// Stop server
+	Stop() error
 }
 
 // Server implementation.
