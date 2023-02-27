@@ -230,8 +230,8 @@ type serverImpl struct {
 	rootHeads          []string           // Additional head HTML texts of the window list page (app root)
 	appRootHandlerFunc AppRootHandlerFunc // App root handler function
 	sessIDCookieName   string             // Session ID cookie name
-
-	sessMux sync.RWMutex // Mutex to protect state related to session handling
+	server             *http.Server       // server
+	sessMux            sync.RWMutex       // Mutex to protect state related to session handling
 }
 
 // NewServer creates a new GUI server in HTTP mode.
@@ -268,6 +268,7 @@ func newServerImpl(appName, addr, certFile, keyFile string) *serverImpl {
 		sessCreatorNames: make(map[string]string),
 		theme:            ThemeDefault,
 		sessIDCookieName: defaultSessIDCookieName,
+		server:           nil,
 	}
 
 	if s.appName == "" {

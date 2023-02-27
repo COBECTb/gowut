@@ -20,6 +20,7 @@
 package gwu
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os/exec"
@@ -73,11 +74,18 @@ func (s *serverImpl) Start(openWins ...string) error {
 	if s.secure {
 		err = http.ListenAndServeTLS(s.addr, s.certFile, s.keyFile, nil)
 	} else {
-		err = http.ListenAndServe(s.addr, nil)
+		s.server = &http.Server{Addr: s.addr}
+		err = s.server.ListenAndServe()
 	}
 
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *serverImpl) Stop() error {
+	if err := s.server.Shutdown(context.TODO()); err != nil {
+		s.logger.Print(err) // failure/timeout shutting down the server gracefully
+	}
 }
