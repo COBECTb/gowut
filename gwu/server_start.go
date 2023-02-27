@@ -87,5 +87,7 @@ func (s *serverImpl) Start(openWins ...string) error {
 func (s *serverImpl) Stop() error {
 	if err := s.server.Shutdown(context.TODO()); err != nil {
 		s.logger.Print(err) // failure/timeout shutting down the server gracefully
+		return err
 	}
+	return nil
 }
